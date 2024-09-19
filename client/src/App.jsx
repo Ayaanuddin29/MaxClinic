@@ -7,6 +7,7 @@ import Contact from './pages/Contact'
 import Home from './pages/Home';
 import Dashboard from './pages/Dashboard';
 import Header from './components/Header'
+import Footer from './components/Footer'
 function App() {
   const isAuthenticated=false;
   return (
@@ -20,6 +21,7 @@ function App() {
       <Route path='/signin' element={<SignIn/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
     </Routes>
+    <Footer/>
     </BrowserRouter>
     
 

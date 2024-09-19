@@ -1,10 +1,13 @@
 import { Alert, Button, Label, Spinner, TextInput } from 'flowbite-react'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { signInFaliure,signInStart,signInSuccess } from '../redux/user/userSlice';
+import {useDispatch,useSelector} from 'react-redux'
+import OAuth from '../components/OAuth';
 export default function SignIn() {
   const [formData,setFormData]=useState({});
-  const [loading,setLoading]=useState(false);
-  const [errorMessage,setErrorMessage]=useState(null);
+  const dispatch=useDispatch();
+  const {loading,error:errorMessage}=useSelector((state)=>state.user)||{};
   const navigate=useNavigate();
   const handleChange=(e)=>{
     setFormData({...formData,[e.target.id]:e.target.value.trim()})
@@ -13,12 +16,10 @@ export default function SignIn() {
 const handleSubmit=async(e)=>{
   e.preventDefault();
   if(!formData.email||!formData.password){
-    return setErrorMessage("Please fill all Fields")
+    return dispatch(signInFaliure("Please fill all Fields"))
   }
-  setLoading(true)
   try{
-    setLoading(true)
-    setErrorMessage(null)
+    dispatch(signInStart());
 const res=await fetch('/api/auth/signin',{
   method:"POST",
   headers:{"Content-Type":"application/json"},
@@ -26,13 +27,16 @@ const res=await fetch('/api/auth/signin',{
 })
 const data=await res.json();
 if(data.success===false){
-  return setErrorMessage("Email is not registered");
+  dispatch(signInFaliure(data.message));
 }
-setLoading(false);
-navigate('/')
+
+if(res.ok){
+  dispatch(signInSuccess(data))
+  navigate('/')
+}
   }
   catch(err){
-setErrorMessage(err.message)
+dispatch(signInFaliure(err.message))
   }
 }
   return (
@@ -58,9 +62,10 @@ setErrorMessage(err.message)
           <Button gradientDuoTone='redToYellow' type='submit' outline className='text-bold' disabled={loading}>{loading?(
            <>
            <Spinner size='sm' />
-            <span>Loading....</span>
+            <span className='pl-1'>Loading....</span>
             </>
-          ):"SignUp"}</Button>
+          ):"SignIn"}</Button>
+                  <OAuth />
         </form>
        <div className='flex gap-2 text-sm mt-4'>
         <span>Don't Have an Account?</span>

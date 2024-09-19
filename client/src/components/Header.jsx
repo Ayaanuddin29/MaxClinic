@@ -9,7 +9,7 @@ export default function Header() {
   return (
     <Navbar className='border-b-2' color={'blue'}>
 <Link to='/' className='self-center whitespace-nowrap text-sm sm:text-xl font-semibold dark:text-white text-black'>
-<span className='px-2 py-1 bg-gradient-to-r from-red-500 via-pink-500 to-yellow-500 rounded-lg text-white'>Max</span><span className='text-black'>Clinic</span>
+<span className='px-2 py-1 bg-gradient-to-r from-red-500 via-pink-500 to-yellow-500 rounded-lg text-white'>Max Dental</span><span className='text-black'>Clinic</span>
 </Link>
 <form>
   <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} className='hidden lg:inline'/>
